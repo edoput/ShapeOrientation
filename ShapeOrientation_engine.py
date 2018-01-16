@@ -9,6 +9,7 @@ from qgis.gui import *
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
+import csv
 from math import pi, atan
 
 import numpy as np
@@ -197,36 +198,35 @@ def DiagOrientPolyg(poly, interval, table, diagr, colorRamp, Id):
             colorRamp,
         )
 
+
 def DiagOrientLine(line, interval, table, diagr, colorRamp, Id):
     lines = QgsVectorLayer(line, "lines", "ogr")
     lines_prov = lines.dataProvider()
 
     # Csv File for orientation record
-    Exrap = open(table, 'w')
-    firstline = 'Id,Orientation\n'
-    Exrap.write(firstline)
+    with open(table, 'w') as out:
+        writer = csv.DictWriter(out, ['id', 'orientation'])
+        writer.writeheader()
 
-    angles = []
-    # intervals on the circle
-    inter = np.arange(0, 361, interval)
-    inter = [i*pi/180 for i in inter]
-    theta = inter[0:-1]
+        angles = []
+        # intervals on the circle
+        inter = np.arange(0, 361, interval)
+        inter = [i*pi/180 for i in inter]
+        theta = inter[0:-1]
 
-    # Loop on geometries
-    # TODO: use csv module
-    for feature in lines.getFeatures():
-        polyline = feature.geometry().asPolyline()
-        Idf = str(feature.attribute(Id))
-        # Azimuth of the line
-        try:
-            gist = Gisement(polyline[0], polyline[-1])
-            csvline = '{:s},{:f}\n'.format(Idf, gist*180/pi)
-            Exrap.write(csvline)
-            angles.append(gist)
-        except IndexError:
-            print('Feature {} has {:d} points'.format(Idf, len(polyline)))
+        for feature in lines.getFeatures():
+            polyline = feature.geometry().asPolyline()
+            try:
+                gist = Gisement(polyline[0], polyline[-1])
+                angles.append(gist)
+            except IndexError:
+                gist = float('nan')
 
-    Exrap.close()
+            writer.writerow({
+                'id': feature.attribute(Id),
+                'orientation': gist * 180/pi,
+            })
+
     if diagr is True:
         DiagGenerator(
             angles,
