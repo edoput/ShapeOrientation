@@ -3,14 +3,18 @@
 ##Export=output directory
 
 from qgis.core import *
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
 from qgis.utils import *
 from qgis.gui import *
-from math import *
+
+from PyQt4.QtCore import *
+from PyQt4.QtGui import *
+
+from math import pi, atan
+
 import numpy as np
 import matplotlib.pyplot as plt
 from pylab import *
+from pylab import hist
 
 
 # F.Fouriaux juillet 2017
@@ -193,40 +197,41 @@ def DiagOrientPolyg(poly, interval, table, diagr, colorRamp, Id):
             colorRamp,
         )
 
-
-def DiagOrientLine (line, interval, table, diagr, colorRamp ,Id):
+def DiagOrientLine(line, interval, table, diagr, colorRamp, Id):
     lines = QgsVectorLayer(line, "lines", "ogr")
     lines_prov = lines.dataProvider()
 
     # Csv File for orientation record
-    Exrap = open(table,'w')
+    Exrap = open(table, 'w')
     firstline = 'Id,Orientation\n'
     Exrap.write(firstline)
 
-
-    fLine = lines.getFeatures()
     angles = []
     # intervals on the circle
     inter = np.arange(0, 361, interval)
     inter = [i*pi/180 for i in inter]
     theta = inter[0:-1]
 
-
     # Loop on geometries
-    for f in fLine:
-
-        geomLine = f.geometry()
-        Idf = str(f.attribute(Id))
-        geomL = geomLine.geometry()
-        a = QgsPoint(geomL.startPoint().x(),geomL.startPoint().y())
-        b = QgsPoint(geomL.endPoint().x(),geomL.endPoint().y())
-
+    # TODO: use csv module
+    for feature in lines.getFeatures():
+        polyline = feature.geometry().asPolyline()
+        Idf = str(feature.attribute(Id))
         # Azimuth of the line
-        gist = Gisement(a,b)
-        csvline = '%s,%f\n' %(Idf,gist*180/pi)
-        Exrap.write(csvline)
-        angles.append(gist)
+        try:
+            gist = Gisement(polyline[0], polyline[-1])
+            csvline = '{:s},{:f}\n'.format(Idf, gist*180/pi)
+            Exrap.write(csvline)
+            angles.append(gist)
+        except IndexError:
+            print('Feature {} has {:d} points'.format(Idf, len(polyline)))
 
     Exrap.close()
-    if diagr == True:
-        DiagGenerator(angles, inter, theta, interval, colorRamp)
+    if diagr is True:
+        DiagGenerator(
+            angles,
+            inter,
+            theta,
+            interval,
+            colorRamp,
+        )
