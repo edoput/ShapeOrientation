@@ -26,16 +26,23 @@ import os
 from PyQt4 import QtGui, uic
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
-from ShapeOrientationDialog import *
+from ShapeOrientationDialog import ShorientDialg
 from ShapeOrientation_engine import *
 
-image = os.path.join(os.path.dirname(__file__), "images")
+images_folder = os.path.join(os.path.dirname(__file__), "images")
 
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
         os.path.dirname(__file__), 'ShapeOrientation_dialog_base.ui'))
 
 
 class ShapeOrientationDialog(ShorientDialg, FORM_CLASS):
+    colormaps = [
+        (QIcon(os.path.join(images_folder, "AutomnRamp.png")), "autumn"),
+        (QIcon(os.path.join(images_folder, "WinterRamp.png")), "winter"),
+        (QIcon(os.path.join(images_folder, "SummerRamp.png")), "summer"),
+        (QIcon(os.path.join(images_folder, "BoneRamp.png")), "bone"),
+        (QIcon(os.path.join(images_folder, "GrayRamp.png")), "gray"),
+    ]
     def __init__(self, parent=None):
         """Constructor."""
         ShorientDialg.__init__(self)
