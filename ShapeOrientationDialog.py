@@ -66,11 +66,9 @@ def AjoutCsvLayer(fileName):
 
 
 class ShorientDialg(QDialog):
-	def __init__(self):
-		QDialog.__init__(self)
-	
-		
-	 
+    def __init__(self):
+        QDialog.__init__(self)
+
 	# list of layers polygons shp already charged in the interface   
 	def layerPolyList(self):
 		layers = iface.legendInterface().layers()
