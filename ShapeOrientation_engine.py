@@ -37,33 +37,51 @@ def Gisement(a, b):
     return gis
 
 
-# F MinRect(polygone,point)  --> Return Polygon minimum, rectangle minimum,  orientation of the great axis
-def MinRect(hull,centre) :
-	n=len(hull.asPolygon()[0])
-	aires=[]
-	gisement=0.0
-	rotation=0.0
-	orient=0.0
-	for i in range(n-1) :
-		gisement=Gisement(hull.asPolygon()[0][i],hull.asPolygon()[0][i+1])      # azimuth computation
-		rotation= rotation+gisement                                             # Record the rotations
-		hull.rotate(-1*180*gisement/pi,centre)                                  # inverse rotation of the azimuth
-		bboxrect=hull.boundingBox()                                             # creation of the bounding box
-		airebbox=bboxrect.width()*bboxrect.height()                             # computation of the area of the bbox
-		aires.append(airebbox)                                                  # append this area in a list for comparaison
-		if airebbox == min(aires):
-			if bboxrect.xMaximum()-bboxrect.xMinimum()<=bboxrect.yMaximum()-bboxrect.yMinimum():
-				orient=rotation                                                 # selection of the major axis
-			else:
-				orient=rotation+(pi/2)
+# F MinRect(polygone,point)  --> Return Polygon minimum, rectangle minimum,
+# orientation of the great axis
+def MinRect(hull, centre):
+    """
+    inRect(polygone,point)  -->
+    Return Polygon minimum, rectangle minimum, orientation of the great axis
+    """
+    n = len(hull.asPolygon()[0])
+    aires = []
+    gisement = 0.0
+    rotation = 0.0
+    orient = 0.0
+    for i in range(n-1):
+        # azimuth computation
+        gisement = Gisement(
+                hull.asPolygon()[0][i],
+                hull.asPolygon()[0][i+1]
+                )
+        # Record the rotations
+        rotation = rotation + gisement
+        # inverse rotation of the azimuth
+        hull.rotate(-1*180*gisement/pi, centre)
+        # creation of the bounding box
+        bboxrect = hull.boundingBox()
+        # compute bbox's area
+        airebbox = bboxrect.width() * bboxrect.height()
+        # store it for later comparison
+        aires.append(airebbox)
+        if airebbox == min(aires):
+            if bboxrect.xMaximum()-bboxrect.xMinimum() <= bboxrect.yMaximum() - bboxrect.yMinimum():
+                # select as major axis
+                orient = rotation
+            else:
+                orient = rotation + (pi/2)
+            if orient >= 2*pi:
+                # Angle between 0 and 360 degree
+                n = int(orient/(2*pi))
+                orient = orient-(n*2*pi)
+            if orient > pi:
+                # Azimut between 0 and 180 degree
+                # because we can't know the direction
+                orient = orient-pi
 
-			if orient>=2*pi:                                                    # Angle between 0 and 360 degree
-				n=int(orient/(2*pi))
-				orient=orient-(n*2*pi)
-			if orient > pi: 
-				orient=orient-pi                                                # Azimut between 0 and 180 deg cause we can't know the direction
+    return orient
 
-	return orient
 
 # F DiagGenerator (angles,interval) --> Show a matplotlib rose diagram of orientation
 def DiagGenerator (angles,inter,theta,interval, colorRamp):
