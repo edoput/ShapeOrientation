@@ -140,55 +140,58 @@ def DiagGenerator(angles, inter, theta, interval, colorRamp):
     plt.show()
 
 
-def DiagOrientPolyg (poly, interval, table, diagr, colorRamp, Id):
-	
-	polygones= QgsVectorLayer(poly,"polygones","ogr")
-	poly_prov= polygones.dataProvider()
-	# Csv File for orientation record
-	Exrap= open(table,'w')
-	firstline='Id,Orientation\n'
-	Exrap.write(firstline)
+def DiagOrientPolyg(poly, interval, table, diagr, colorRamp, Id):
+    polygones = QgsVectorLayer(poly, "polygones", "ogr")
+    poly_prov = polygones.dataProvider()
+    # Csv File for orientation record
+    Exrap = open(table, 'w')
+    firstline = 'Id,Orientation\n'
+    Exrap.write(firstline)
+    fPolyg = polygones.getFeatures()
+    angles = []
+    # intervals on the circle
+    inter = np.arange(0, 361, interval)
+    inter = [i*pi/180 for i in inter]
+    theta = inter[0:-1]
+    #number of iteration for progress bar
+    ntot = polygones.featureCount()
+    ni = 0
+    #progress bar initialisation
+    iface.messageBar().clearWidgets()
+    progressMessageBar = iface.messageBar().createMessage("Computation of directions ...")
+    progress = QProgressBar()
+    progress.setMaximum(100)
+    progressMessageBar.layout().addWidget(progress)
+    iface.messageBar().pushWidget(
+        progressMessageBar,
+        iface.messageBar().INFO,
+    )
+    # TODO: use csv module
+    # Loop on geometries
+    for f in fPolyg:
+        ni += 1
+        progress.setValue(ni/ntot*100)
+        geomPolyg = f.geometry()
+        Aire = geomPolyg.area()
+        Idf = str(f.attribute(Id))
+        # ConvexHull and centroid of the polygon
+        hullPolyg = geomPolyg.convexHull()
+        centroidPolyg = geomPolyg.centroid().asPoint()
 
+        gist = MinRect(hullPolyg, centroidPolyg)
+        csvline = '{:s},{:f}\n'.format(Idf, gist*180/pi)
+        Exrap.write(csvline)
+        angles.append(gist)
 
-	fPolyg=polygones.getFeatures()
-	angles=[]
-	# intervals on the circle
-	inter=np.arange(0,361,interval)
-	inter=[i*pi/180 for i in inter]
-	theta=inter[0:-1]
-	
-	#number of iteration for progress bar
-	ntot=polygones.featureCount()
-	ni=0
-	
-	#progress bar initialisation
-	iface.messageBar().clearWidgets()
-	progressMessageBar=iface.messageBar().createMessage("Computation of directions ...")
-	progress= QProgressBar()
-	progress.setMaximum(100)
-	progressMessageBar.layout().addWidget(progress)
-	iface.messageBar().pushWidget(progressMessageBar, iface.messageBar().INFO)
-	# Loop on geometries
-	for f in fPolyg:
-		ni+=1
-		progress.setValue(ni/ntot*100)
-		geomPolyg= f.geometry() 
-		Aire=geomPolyg.area()
-		Idf=str(f.attribute(Id))
-
-	# ConvexHull and centroid of the polygon
-		
-		hullPolyg=geomPolyg.convexHull()
-		centroidPolyg=geomPolyg.centroid().asPoint()
-
-		gist= MinRect(hullPolyg,centroidPolyg)
-		csvline='%s,%f\n' %(Idf,gist*180/pi)
-		Exrap.write (csvline)
-		angles.append(gist)
-
-	Exrap.close()
-	if diagr == True:
-		DiagGenerator(angles,inter,theta,interval, colorRamp)
+    Exrap.close()
+    if diagr is True:
+        DiagGenerator(
+            angles,
+            inter,
+            theta,
+            interval,
+            colorRamp,
+        )
 
 def DiagOrientLine (line, interval, table, diagr, colorRamp,Id):
 	
