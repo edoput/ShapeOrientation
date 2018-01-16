@@ -36,6 +36,7 @@ from ShapeOrientation_engine import *
 
 localelang = QSettings().value('locale/userLocale')[0:2]
 
+
 def selectLayer(layerName):
     layers = iface.legendInterface().layers()
     for l in layers:
@@ -69,30 +70,33 @@ class ShorientDialg(QDialog):
     def __init__(self):
         QDialog.__init__(self)
 
-	# list of layers polygons shp already charged in the interface   
-	def layerPolyList(self):
-		layers = iface.legendInterface().layers()
-		layer_list = []
-		self.cbox_PolyShp.clear()
-		for layer in layers:
-			if layer.providerType()=='ogr':
-				if layer.dataProvider().storageType() == 'ESRI Shapefile' and layer.geometryType() == 2:
-					layer_list.append(layer.name())
-		
-		self.cbox_PolyShp.addItems(layer_list)
-		
-		
-	# list of lines shp already charged in the interface
-	def layerLineList(self):
-		layers = iface.legendInterface().layers()
-		layer_list = []
-		self.cbox_LineShp.clear()
-		for layer in layers:
-			if layer.providerType()=='ogr':
-				if layer.dataProvider().storageType() == 'ESRI Shapefile' and layer.geometryType() == 1:
-					layer_list.append(layer.name())
-		
-		self.cbox_LineShp.addItems(layer_list)
+    def layerPolyList(self):
+	 """
+        list of layers polygons shp already charged in the interface
+        """
+        layers = iface.legendInterface().layers()
+        layer_list = []
+        self.cbox_PolyShp.clear()
+        for layer in layers:
+            if layer.providerType()=='ogr':
+                if layer.dataProvider().storageType() == 'ESRI Shapefile' and layer.geometryType() == 2:
+                    layer_list.append(layer.name())
+
+        self.cbox_PolyShp.addItems(layer_list)
+
+    def layerLineList(self):
+        """
+        list of lines shp already charged in the interface
+        """
+        layers = iface.legendInterface().layers()
+        layer_list = []
+        self.cbox_LineShp.clear()
+        for layer in layers:
+            if layer.providerType() == 'ogr':
+                if layer.dataProvider().storageType() == 'ESRI Shapefile' and layer.geometryType() == 1:
+                    layer_list.append(layer.name())
+
+        self.cbox_LineShp.addItems(layer_list)
 
 
 	def selectedLayerPoly(self):
