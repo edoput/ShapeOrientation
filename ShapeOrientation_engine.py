@@ -18,26 +18,24 @@ from pylab import *
 
 # # # # Fonctions # # # #
 # F Gisement(point1, point2) --> Return Gisement
-def Gisement (a,b):
-	deltax=a[0]-b[0]
-	signex=deltax/abs(deltax)
-	deltay=a[1]-b[1]
-	if deltay == 0:
-		theta=pi+(pi/2*signex)
-	else: 
-		theta=atan(deltax/deltay)
-		
-	if deltax<=0 and deltay<=0:
-		gis=theta
-	elif deltax>=0 and deltay<=0:
-		gis=theta
-	else:
-		gis=theta + pi
-		
-	if gis<0:
-		gis=2*pi+gis
-		
-	return gis
+def Gisement(a, b):
+    deltax = a[0]-b[0]
+    signex = deltax/abs(deltax)
+    deltay = a[1]-b[1]
+    if deltay == 0:
+        theta = pi + (pi/2 * signex)
+    else:
+        theta = atan(deltax/deltay)
+    if deltax <= 0 and deltay <= 0:
+        gis = theta
+    elif deltax >= 0 and deltay <= 0:
+        gis = theta
+    else:
+        gis = theta + pi
+    if gis < 0:
+        gis = 2*pi + gis
+    return gis
+
 
 # F MinRect(polygone,point)  --> Return Polygon minimum, rectangle minimum,  orientation of the great axis
 def MinRect(hull,centre) :
