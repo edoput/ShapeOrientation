@@ -84,43 +84,61 @@ def MinRect(hull, centre):
 
 
 # F DiagGenerator (angles,interval) --> Show a matplotlib rose diagram of orientation
-def DiagGenerator (angles,inter,theta,interval, colorRamp):
-	#progress bar initialisation
-	iface.messageBar().clearWidgets()
-	progressMessageBar=iface.messageBar().createMessage("Creation of the diagram ...")
-	progress= QProgressBar()
-	progress.setMaximum(100)
-	progressMessageBar.layout().addWidget(progress)
-	iface.messageBar().pushWidget(progressMessageBar, iface.messageBar().INFO)
-	
-	#frequency
-	histo=hist(angles,inter)[0]
-	r=histo.tolist()
-	
-	# fake plot to get the color bar
-	plot = plt.scatter(r, r, c = r, cmap = colorRamp+'_r')
-	plt.clf()
-	#colorRamp
-	cr=cm.get_cmap(name=colorRamp+'_r')
-	# diagram
-	ax = plt.subplot(111, projection='polar')
-	colors= cr(histo/float(max(histo)))
-	larg=interval*pi/180
-	
-	ax.bar(theta,r,width=larg,color=colors,align='center',edgecolor='black')
-	ax.set_rmax(max(r))
-	ticks=np.arange(0,max(r),max(r)/4)
-	ax.set_rticks(ticks)  # less radial ticks
-	ax.set_rlabel_position(-22.5)  # get radial labels away from plotted line
-	ax.set_theta_direction(-1)
-	ax.set_theta_zero_location("N")
-	ax.grid(True)
+def DiagGenerator(angles, inter, theta, interval, colorRamp):
+    #progress bar initialisation
+    iface.messageBar().clearWidgets()
+    progressMessageBar = iface.messageBar().createMessage("Creation of the diagram ...")
+    progress = QProgressBar()
+    progress.setMaximum(100)
+    progressMessageBar.layout().addWidget(progress)
+    iface.messageBar().pushWidget(
+        progressMessageBar,
+        iface.messageBar().INFO
+    )
+    # frequency
+    histo = hist(angles, inter)[0]
+    r = histo.tolist()
+    # fake plot to get the color bar
+    plot = plt.scatter(
+        r,
+        r,
+        c=r,
+        cmap=colorRamp+'_r'
+    )
+    plt.clf()
+    #colorRamp
+    cr = cm.get_cmap(name=colorRamp+'_r')
+    # diagram
+    ax = plt.subplot(
+        111,
+        projection='polar'
+    )
+    colors = cr(histo/float(max(histo)))
+    larg = interval * pi/180
+    ax.bar(
+        theta,
+        r,
+        width=larg,
+        color=colors,
+        align='center',
+        edgecolor='black',
+    )
+    ax.set_rmax(max(r))
+    ticks = np.arange(0, max(r), max(r)/4)
+    ax.set_rticks(ticks)  # less radial ticks
+    ax.set_rlabel_position(-22.5)  # get radial labels away from plotted line
+    ax.set_theta_direction(-1)
+    ax.set_theta_zero_location("N")
+    ax.grid(True)
 
-	plt.colorbar(plot)
-	ax.set_title("Frequence des orientations", va='bottom')
-	progress.setValue (100)
-	
-	plt.show() 
+    plt.colorbar(plot)
+    ax.set_title(
+        "Frequence des orientations",
+        va='bottom',
+    )
+    progress.setValue(100)
+    plt.show()
+
 
 def DiagOrientPolyg (poly, interval, table, diagr, colorRamp, Id):
 	
