@@ -193,41 +193,40 @@ def DiagOrientPolyg(poly, interval, table, diagr, colorRamp, Id):
             colorRamp,
         )
 
-def DiagOrientLine (line, interval, table, diagr, colorRamp,Id):
-	
-	lines= QgsVectorLayer(line,"lines","ogr")
-	lines_prov= lines.dataProvider()
 
-	# Csv File for orientation record
-	Exrap= open(table,'w')
-	firstline='Id,Orientation\n'
-	Exrap.write(firstline)
+def DiagOrientLine (line, interval, table, diagr, colorRamp ,Id):
+    lines = QgsVectorLayer(line, "lines", "ogr")
+    lines_prov = lines.dataProvider()
 
-
-	fLine=lines.getFeatures()
-	angles=[]
-	# intervals on the circle
-	inter=np.arange(0,361,interval)
-	inter=[i*pi/180 for i in inter]
-	theta=inter[0:-1]
+    # Csv File for orientation record
+    Exrap = open(table,'w')
+    firstline = 'Id,Orientation\n'
+    Exrap.write(firstline)
 
 
-	# Loop on geometries
-	for f in fLine:
+    fLine = lines.getFeatures()
+    angles = []
+    # intervals on the circle
+    inter = np.arange(0, 361, interval)
+    inter = [i*pi/180 for i in inter]
+    theta = inter[0:-1]
 
-		geomLine= f.geometry() 
-		Idf=str(f.attribute(Id))
-		geomL=geomLine.geometry()
-		a=QgsPoint(geomL.startPoint().x(),geomL.startPoint().y())
-		b=QgsPoint(geomL.endPoint().x(),geomL.endPoint().y())
 
-	# Azimuth of the line
+    # Loop on geometries
+    for f in fLine:
 
-		gist= Gisement(a,b)
-		csvline='%s,%f\n' %(Idf,gist*180/pi)
-		Exrap.write (csvline)
-		angles.append(gist)
+        geomLine = f.geometry()
+        Idf = str(f.attribute(Id))
+        geomL = geomLine.geometry()
+        a = QgsPoint(geomL.startPoint().x(),geomL.startPoint().y())
+        b = QgsPoint(geomL.endPoint().x(),geomL.endPoint().y())
 
-	Exrap.close()
-	if diagr == True:
-		DiagGenerator(angles,inter,theta,interval,colorRamp)
+        # Azimuth of the line
+        gist = Gisement(a,b)
+        csvline = '%s,%f\n' %(Idf,gist*180/pi)
+        Exrap.write(csvline)
+        angles.append(gist)
+
+    Exrap.close()
+    if diagr == True:
+        DiagGenerator(angles, inter, theta, interval, colorRamp)
