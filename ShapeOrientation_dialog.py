@@ -56,10 +56,32 @@ class ShapeOrientationDialog(ShorientDialg, FORM_CLASS):
         self.layerLineList()
         for (colormap, name) in self.colormaps:
                 self.cbox_ColorRamp.addItem(colormap, name)
-        QObject.connect(self.pushButton_Output, SIGNAL('clicked()'),self.selectDirectory)
-        QObject.connect(self.pushButton_1, SIGNAL('clicked()'),self.OpenShp)
-        QObject.connect(self.pushButton_2, SIGNAL('clicked()'),self.OpenShp)
-        QObject.connect(self.cbox_PolyShp, SIGNAL('currentIndexChanged(QString)'), self.updateIDFieldPoly)
-        QObject.connect(self.cbox_LineShp, SIGNAL('currentIndexChanged(QString)'), self.updateIDFieldLine)
-        QObject.connect(self.pushButton_Poly, SIGNAL('clicked()'),self.RunPoly)
-        QObject.connect(self.pushButton_Line, SIGNAL('clicked()'),self.RunLine)
+
+        QObject.connect(self.pushButton_Output,
+                        SIGNAL('clicked()'),
+                        self.selectDirectory,
+                        )
+        QObject.connect(self.pushButton_1,
+                        SIGNAL('clicked()'),
+                        self.OpenShp,
+                        )
+        QObject.connect(self.pushButton_2,
+                        SIGNAL('clicked()'),
+                        self.OpenShp,
+                        )
+        QObject.connect(self.cbox_PolyShp,
+                        SIGNAL('currentIndexChanged(QString)'),
+                        self.updateIDFieldPoly,
+                        )
+        QObject.connect(self.cbox_LineShp,
+                        SIGNAL('currentIndexChanged(QString)'),
+                        self.updateIDFieldLine,
+                        )
+        QObject.connect(self.pushButton_Poly,
+                        SIGNAL('clicked()'),
+                        self.RunPoly,
+                        )
+        QObject.connect(self.pushButton_Line,
+                        SIGNAL('clicked()'),
+                        self.RunLine,
+                        )
