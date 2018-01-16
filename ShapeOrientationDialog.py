@@ -37,22 +37,33 @@ from ShapeOrientation_engine import *
 localelang = QSettings().value('locale/userLocale')[0:2]
 
 def selectLayer(layerName):
-	layers=iface.legendInterface().layers()
-	for l in layers:
-		if l.name() == layerName:
-			return l
+    layers = iface.legendInterface().layers()
+    for l in layers:
+        if l.name() == layerName:
+            return l
+
 
 def AjoutShpLayer(fileName):
-	if os.name=='nt':
-		fileName='/'+fileName
-	nom= ntpath.basename(fileName)
-	iface.addVectorLayer(fileName,nom,"ogr")
+    if os.name == 'nt':
+        fileName = '/'+fileName
+    nom = ntpath.basename(fileName)
+    iface.addVectorLayer(
+        fileName,
+        nom,
+        "ogr",
+    )
+
 
 def AjoutCsvLayer(fileName):
-	if os.name=='nt':
-		fileName='/'+fileName
-	nom= ntpath.basename(fileName)
-	iface.addVectorLayer(fileName,nom,"delimitedtext")
+    if os.name == 'nt':
+        fileName = '/'+fileName
+    nom = ntpath.basename(fileName)
+    iface.addVectorLayer(
+        fileName,
+        nom,
+        "delimitedtext"
+    )
+
 
 class ShorientDialg(QDialog):
 	def __init__(self):
