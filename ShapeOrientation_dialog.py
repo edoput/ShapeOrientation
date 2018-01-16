@@ -54,11 +54,8 @@ class ShapeOrientationDialog(ShorientDialg, FORM_CLASS):
         self.setupUi(self)
         self.layerPolyList()
         self.layerLineList()
-        self.cbox_ColorRamp.addItem(QIcon(os.path.join(image,"AutomnRamp.png")),"autumn")
-        self.cbox_ColorRamp.addItem(QIcon(os.path.join(image,"WinterRamp.png")),"winter")
-        self.cbox_ColorRamp.addItem(QIcon(os.path.join(image,"SummerRamp.png")),"summer")
-        self.cbox_ColorRamp.addItem(QIcon(os.path.join(image,"BoneRamp.png")),"bone")
-        self.cbox_ColorRamp.addItem(QIcon(os.path.join(image,"GreyRamp.png")),"gray")
+        for (colormap, name) in self.colormaps:
+                self.cbox_ColorRamp.addItem(colormap, name)
         QObject.connect(self.pushButton_Output, SIGNAL('clicked()'),self.selectDirectory)
         QObject.connect(self.pushButton_1, SIGNAL('clicked()'),self.OpenShp)
         QObject.connect(self.pushButton_2, SIGNAL('clicked()'),self.OpenShp)
