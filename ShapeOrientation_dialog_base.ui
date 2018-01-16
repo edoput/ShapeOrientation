@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>ShapeOrientation</string>
+   <string>Shape Orientation Plugin</string>
   </property>
   <widget class="QTabWidget" name="tabWidget">
    <property name="geometry">
@@ -27,7 +27,7 @@
    </property>
    <widget class="QWidget" name="Polygons">
     <attribute name="title">
-     <string>Polygons</string>
+     <string>Use polygon layer</string>
     </attribute>
     <widget class="QLabel" name="label_PolyShp">
      <property name="geometry">
@@ -39,7 +39,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Polygon Shp</string>
+      <string>Layer name</string>
      </property>
     </widget>
     <widget class="QComboBox" name="cbox_PolyShp">
@@ -62,7 +62,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>...</string>
+      <string>Open</string>
      </property>
     </widget>
     <widget class="QDoubleSpinBox" name="doubleSpinBox">
@@ -127,13 +127,13 @@
       </rect>
      </property>
      <property name="text">
-      <string>OK</string>
+      <string>Begin</string>
      </property>
     </widget>
    </widget>
    <widget class="QWidget" name="Lines">
     <attribute name="title">
-     <string>Lines</string>
+     <string>Use line layer</string>
     </attribute>
     <widget class="QLabel" name="label_2">
      <property name="geometry">
@@ -145,7 +145,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Line Shp</string>
+      <string>Layer name</string>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButton_2">
@@ -158,7 +158,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>...</string>
+      <string>Open</string>
      </property>
     </widget>
     <widget class="QComboBox" name="cbox_LineShp">
@@ -233,7 +233,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>OK</string>
+      <string>Begin</string>
      </property>
     </widget>
    </widget>
@@ -248,7 +248,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Output:</string>
+    <string>Output folder</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="LineEdit_Output">
@@ -283,7 +283,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>...</string>
+    <string>Open</string>
    </property>
   </widget>
   <widget class="QCheckBox" name="checkDiagram">
@@ -296,7 +296,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Diagram</string>
+    <string>Plot rose diagram</string>
    </property>
    <property name="checked">
     <bool>false</bool>
@@ -331,7 +331,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Colors</string>
+    <string>Plot colour scheme</string>
    </property>
   </widget>
  </widget>
